@@ -1,39 +1,33 @@
-name: Generate pacman animation
+name: Generate Pacman Chart
 
 on:
   schedule:
     - cron: "0 */12 * * *"
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  generate:
-    permissions:
-      contents: write
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Generate pacman contribution graph
-        uses: abozanona/pacman-contribution-graph@main
-        with:
-          github_user_name: "danmoribe"
-
-      - name: Setup output directory
-        run: |
-          mkdir -p dist
-          cp pacman-contribution-graph.svg dist/
-          cp pacman-contribution-graph.svg dist/pacman-contribution-graph-dark.svg
-
-      - name: Deploy to output branch
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: output
-          force_orphan: true
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Generate GitHub Chart
+      run: |
+        # Gerar gráfico usando API alternativa
+        curl -L -o pacman-contribution-graph.svg "https://ghchart.rshah.org/danmoribe"
+        
+    - name: Create dark version
+      run: |
+        cp pacman-contribution-graph.svg pacman-contribution-graph-dark.svg
+        ls -la  # Listar arquivos para debug
+        
+    - name: Deploy to output branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        publish_branch: output
+        force_orphan: true
