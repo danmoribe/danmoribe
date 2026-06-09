@@ -2,10 +2,6 @@
 
 ###
 
-<h4 align="left">"If you can do good things for people then you have a moral obligation to do those things. Not choice, responsibility!"</h4>
-
-###
-
 ###
 
 <div align="center">
